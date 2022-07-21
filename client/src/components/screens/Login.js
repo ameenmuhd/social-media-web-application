@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { UserContext } from '../../App'
 import M from 'materialize-css'
@@ -8,6 +8,12 @@ function Login() {
     const navigate = useNavigate();
     const [password, setPassword] = useState('')
     const [email, setEmail] = useState('')
+
+    useEffect(() => {
+        if (sessionStorage.getItem("user")) {
+          navigate("/");
+        }
+      }, []);
 
 
 

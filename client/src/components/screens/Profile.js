@@ -8,12 +8,19 @@ import Box from "@mui/material/Box";
 import { Audio } from "react-loader-spinner";
 import Button from '@mui/material/Button';
 import EditIcon from '@mui/icons-material/Edit';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Profile() {
   const [mypics, setMypics] = useState([]);
   const { state, dispatch } = useContext(UserContext);
-  console.log("fri", state);
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (!sessionStorage.getItem("user")) {
+      navigate("/login");
+    }
+  }, []);
+
   useEffect(() => {
     fetch("/mypost", {
       headers: {

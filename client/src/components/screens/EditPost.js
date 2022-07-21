@@ -13,7 +13,13 @@ function EditPost() {
   const [image, setImage] = useState("");
   const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
-  console.log("drt", postId);
+  
+  useEffect(() => {
+    if (!sessionStorage.getItem("user")) {
+      navigate("/login");
+    }
+  }, []);
+
   useEffect(() => {
     fetch(`/editpost/${postId}`, {
       headers: {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { UserContext } from "../../App";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import Typography from "@mui/material/Typography";
@@ -14,6 +14,14 @@ function UserProfile() {
   const [showfollow, setShowfollow] = useState(
     state ? !state.following.includes(userId) : true
   );
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (!sessionStorage.getItem("user")) {
+      navigate("/login");
+    }
+  }, []);
+
   useEffect(() => {
     fetch(`/user/${userId}`, {
       headers: {

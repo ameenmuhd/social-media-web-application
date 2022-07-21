@@ -11,6 +11,12 @@ function Signup() {
   const [image, setImage] = useState("");
   const [url, setUrl] = useState(undefined);
 
+  useEffect(() => {
+    if (sessionStorage.getItem("user")) {
+      navigate("/");
+    }
+  }, []);
+
   useEffect(()=>{
     if(url){
         uploadFields()

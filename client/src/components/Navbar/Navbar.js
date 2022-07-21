@@ -37,9 +37,11 @@ function Navbar() {
             </Typography>
             {state ? (
               <div>
+                <Link to={`/chat/${state._id}`}>
                 <IconButton sx={{color:"black"}}> 
                   <MapsUgcIcon />
                 </IconButton>
+                </Link>
 
                 <IconButton onClick={handleMenu}>
                   <Avatar size="sm" alt="Remy Sharp" src={state.pic} />

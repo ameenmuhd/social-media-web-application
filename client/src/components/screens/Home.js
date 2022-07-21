@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { UserContext } from "../../App";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import M from "materialize-css";
 import AspectRatio from "@mui/joy/AspectRatio";
 import Avatar from "@mui/joy/Avatar";
@@ -24,6 +24,14 @@ function Home() {
   const [postId, setCommentId] = useState("");
   const [data, setData] = useState([]);
   const { state, dispatch } = useContext(UserContext);
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (!sessionStorage.getItem("user")) {
+      navigate("/login");
+    }
+  }, []);
+
   useEffect(() => {
     fetch("/allpost", {
       headers: {

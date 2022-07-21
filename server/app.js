@@ -4,6 +4,7 @@
  const PORT = 5000;
  const {MONGO_URL} = require('./keys')
  const cors = require('cors')
+ const socket = require('socket.io')
 
  mongoose.connect(MONGO_URL,{
     useNewUrlParser:true,
@@ -18,6 +19,7 @@
 
  require("./models/user");
  require("./models/post");
+ require("./models/chat");
  
  app.use(express.json())
  app.use(cors())
@@ -26,9 +28,36 @@
  app.use(require('./routes/auth'))
  app.use(require('./routes/post'))
  app.use(require('./routes/user'))
+ app.use(require('./routes/chat'))
  app.use(require('./routes/admin'))
 
 
- app.listen(PORT,()=>{
+ const server = app.listen(PORT,()=>{
     console.log('server is running on',PORT);
  }) 
+
+ const io = socket(server,{
+   cors:{
+      origin: 'http://localhost:3000',
+      Credential: true,
+   }
+ })
+
+ global.onlineUsers = new Map()
+
+ io.on('connection',(socket)=>{
+   console.log('user connected');
+   global.chatSocket = socket;
+   socket.on('add-user',(userId)=>{
+      onlineUsers.set(userId,socket.id)
+   })
+   socket.on('send-msg',(data)=>{
+      const sendUserSocket = onlineUsers.get(data.to)
+      if(sendUserSocket){
+         socket.to(sendUserSocket).emit('msg-recieve',data.message)
+      }
+   })
+   socket.on('disconnect',()=>{
+      console.log('disconnected');
+   })
+ })

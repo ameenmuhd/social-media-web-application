@@ -7,8 +7,7 @@ import Paper from '@mui/material/Paper';
 import HomeIcon from '@mui/icons-material/Home';
 import { Link } from 'react-router-dom';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-
-
+import StorefrontIcon from '@mui/icons-material/Storefront';
 
 function BottomNavbar() {
   const [value, setValue] = React.useState(0);
@@ -28,6 +27,9 @@ function BottomNavbar() {
           </Link>
           <Link to={'/createpost'}>
           <BottomNavigationAction label="Favorites" icon={<AddCircleIcon />} />
+          </Link>
+          <Link to={'/createpost'}>
+          <BottomNavigationAction label="Favorites" icon={<StorefrontIcon />} />
           </Link>
           <Link to={'/profile'}>
           <BottomNavigationAction label="Archive" icon={<AccountCircleIcon />} />

@@ -8,6 +8,13 @@ function CreatePost() {
     const [title, setTitle] = useState('')
     const [image, setImage] = useState('')
     const [url, setUrl] = useState('')
+
+    useEffect(() => {
+        if (!sessionStorage.getItem("user")) {
+          navigate("/login");
+        }
+      }, []);
+
     useEffect(() => {
         if (url) {
             fetch("/createpost", {
