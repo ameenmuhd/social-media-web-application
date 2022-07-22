@@ -5,15 +5,18 @@ import { useNavigate } from "react-router-dom";
 import Contacts from "../ChatComponents/Contacts";
 import Welcome from "../ChatComponents/Welcome";
 import ChatContainer from "../ChatComponents/ChatContainer";
-import {io} from 'socket.io-client'
+import { io } from "socket.io-client";
+import BottomNavbar from "../BottomNavbar/BottomNavbar";
 
 function Chat() {
-  const host = 'http://localhost:5000';
+  const host = "http://localhost:5000";
   const socket = useRef();
   const [contacts, setContacts] = useState([]);
   const [currentUser, setCurrentUser] = useState(undefined);
   const [currentChat, setCurrentChat] = useState(undefined);
-  const [isLoaded,setIsLoaded] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [onlineUsers,setOnlineUsers] = useState([]);
+  console.log('asa',onlineUsers);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -21,26 +24,34 @@ function Chat() {
       navigate("/login");
     } else {
       setCurrentUser(JSON.parse(sessionStorage.getItem("user")));
-      setIsLoaded(true)
+      setIsLoaded(true);
     }
   }, []);
 
-  useEffect(()=>{
-    if(currentUser){
+  // useEffect(()=>{
+  //   socket.current = io(host);
+  // },[])
+
+  useEffect(() => {
+    if (currentUser) {
       socket.current = io(host);
-      socket.current.emit('add-user', currentUser._id)
+      socket.current.emit("add-user", currentUser._id);
+      socket.current.on('getUsers',users=>{
+        // console.log(users);
+        setOnlineUsers(users)
+      })
     }
-  },[currentUser])
+  }, [currentUser]);
 
   useEffect(() => {
     const fetchContacts = async () => {
       try {
         if (currentUser) {
-          const data = await axios.get(`/chatcontacts/${currentUser._id}`,{
+          const data = await axios.get(`/chatcontacts/${currentUser._id}`, {
             headers: {
               "Content-Type": "application/json",
-              "Authorization": "Bearer " + sessionStorage.getItem("jwt")
-          }
+              Authorization: "Bearer " + sessionStorage.getItem("jwt"),
+            },
           });
           setContacts(data.data.following);
         }
@@ -51,21 +62,33 @@ function Chat() {
     fetchContacts();
   }, [currentUser]);
 
-  const handleChatChange = (chat) =>{
-    setCurrentChat(chat)
-  }
+  const handleChatChange = (chat) => {
+    setCurrentChat(chat);
+  };
 
   return (
-    <Container>
-      <div className="container">
-      <Contacts contacts = {contacts} currentUser = {currentUser} changeChat = {handleChatChange}/>
-      {
-        isLoaded && currentChat === undefined ?
-        <Welcome currentUser = {currentUser}/> :
-        <ChatContainer currentChat = {currentChat} currentUser = {currentUser} socket={socket}/>
-      }
-      </div>
-    </Container>
+    <>
+      <Container>
+        <div className="container">
+          <Contacts
+            contacts={contacts}
+            currentUser={currentUser}
+            onlineUsers={onlineUsers}
+            changeChat={handleChatChange}
+          />
+          {isLoaded && currentChat === undefined ? (
+            <Welcome currentUser={currentUser} />
+          ) : (
+            <ChatContainer
+              currentChat={currentChat}
+              currentUser={currentUser}
+              socket={socket}
+            />
+          )}
+        </div>
+      </Container>
+      <BottomNavbar ChangeColor1={true} />
+    </>
   );
 }
 
@@ -79,12 +102,12 @@ const Container = styled.div`
   align-items: center;
   background-color: #131324;
   .container {
-    height: 85vh;
+    height: 93vh;
     width: 100%;
     background-color: #00000076;
     display: grid;
     grid-template-columns: 25% 75%;
-    @media screen and (min-width: 360px) and (max-width: 480px){
+    @media screen and (min-width: 360px) and (max-width: 480px) {
       grid-template-columns: 35% 65%;
     }
   }

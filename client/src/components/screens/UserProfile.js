@@ -6,6 +6,8 @@ import ImageListItem from "@mui/material/ImageListItem";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { Audio } from "react-loader-spinner";
+import Navbar from "../Navbar/Navbar";
+import BottomNavbar from "../BottomNavbar/BottomNavbar";
 
 function UserProfile() {
   const [usersProfile, setProfile] = useState(null);
@@ -14,7 +16,7 @@ function UserProfile() {
   const [showfollow, setShowfollow] = useState(
     state ? !state.following.includes(userId) : true
   );
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!sessionStorage.getItem("user")) {
@@ -104,6 +106,7 @@ function UserProfile() {
 
   return (
     <>
+      <Navbar />
       {usersProfile ? (
         <div style={{ maxWidth: "550px", margin: "0px auto" }}>
           <div
@@ -159,7 +162,7 @@ function UserProfile() {
                   <h6>{usersProfile.user.following.length} following</h6>
                 </div>
               </Typography>
-              {showfollow ? (
+              {state && !state.following.includes(userId) ? (
                 <button
                   style={{ margin: "10px" }}
                   className="btn waves-effect waves-light #42a5f5 blue lighten-1"
@@ -206,6 +209,7 @@ function UserProfile() {
           <Audio height="100" width="100" color="red" ariaLabel="loading" />
         </div>
       )}
+      <BottomNavbar />
     </>
   );
 }

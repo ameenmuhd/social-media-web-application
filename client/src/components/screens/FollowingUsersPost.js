@@ -18,6 +18,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import Navbar from "../Navbar/Navbar";
+import BottomNavbar from "../BottomNavbar/BottomNavbar";
 
 function Home() {
   const [comment, showComment] = useState(false);
@@ -159,223 +161,235 @@ function Home() {
     comment ? showComment(false) : showComment(true);
   };
 
- 
-
   return (
-    <div className="home">
-      {data.map((item) => {
-        return (
-          <div className="card home-card" key={item._id}>
-            <Card
-              variant="outlined"
-              sx={{
-                minWidth: 300,
-                "--Card-radius": (theme) => theme.vars.radius.xs,
-                borderColor: "white",
-              }}
-            >
-              <Box
-                sx={{ display: "flex", alignItems: "center", pb: 1.5, gap: 1 }}
+    <>
+      <Navbar />
+      <div className="home">
+        {data.map((item) => {
+          return (
+            <div className="card home-card" key={item._id}>
+              <Card
+                variant="outlined"
+                sx={{
+                  minWidth: 300,
+                  "--Card-radius": (theme) => theme.vars.radius.xs,
+                  borderColor: "white",
+                }}
               >
                 <Box
                   sx={{
-                    position: "relative",
-                    "&:before": {
-                      content: '""',
-                      position: "absolute",
-                      top: 0,
-                      left: 0,
-                      bottom: 0,
-                      right: 0,
-                      m: "-2px",
-                    },
+                    display: "flex",
+                    alignItems: "center",
+                    pb: 1.5,
+                    gap: 1,
                   }}
                 >
-                  <IconButton sx={{ p: 0 }}>
-                    <Avatar
-                      size="sm"
-                      alt="Remy Sharp"
-                      src={item.postedBy.pic}
-                    />
-                  </IconButton>
+                  <Box
+                    sx={{
+                      position: "relative",
+                      "&:before": {
+                        content: '""',
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        bottom: 0,
+                        right: 0,
+                        m: "-2px",
+                      },
+                    }}
+                  >
+                    <IconButton sx={{ p: 0 }}>
+                      <Avatar
+                        size="sm"
+                        alt="Remy Sharp"
+                        src={item.postedBy.pic}
+                      />
+                    </IconButton>
+                  </Box>
+                  <Typography fontWeight="lg">
+                    <Link
+                      to={
+                        item.postedBy._id !== state._id
+                          ? "/profile/" + item.postedBy._id
+                          : "/profile"
+                      }
+                    >
+                      {item.postedBy.name}
+                    </Link>
+                  </Typography>
+                  <IconButton
+                    variant="plain"
+                    color="neutral"
+                    size="sm"
+                    sx={{ ml: "auto" }}
+                  ></IconButton>
                 </Box>
-                <Typography fontWeight="lg">
+                <CardOverflow>
+                  <AspectRatio>
+                    <img src={item.photo} alt="" />
+                  </AspectRatio>
+                </CardOverflow>
+                <Box
+                  sx={{ display: "flex", alignItems: "center", mx: -1, my: 1 }}
+                >
+                  <Box sx={{ width: 0, display: "flex", gap: 0.5 }}>
+                    {item.likes.includes(state._id) ? (
+                      <i
+                        className="material-icons"
+                        onClick={() => {
+                          unlikePost(item._id);
+                        }}
+                        style={{ color: "red" }}
+                      >
+                        favorite
+                      </i>
+                    ) : (
+                      <i
+                        className="material-icons"
+                        onClick={() => {
+                          likePost(item._id);
+                        }}
+                      >
+                        favorite_border
+                      </i>
+                    )}
+                    <>
+                      <i
+                        style={{ marginRight: "-24px" }}
+                        className="material-icons"
+                        onClick={() => {
+                          handleShowComment(item._id);
+                        }}
+                      >
+                        comments
+                      </i>
+                      <Typography fontWeight="lg" level="h4">
+                        {item.comments.length}
+                      </Typography>
+                    </>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 0.5,
+                      mx: "auto",
+                    }}
+                  >
+                    {[...Array(5)].map((_, index) => (
+                      <Box
+                        key={index}
+                        sx={{
+                          borderRadius: "50%",
+                          width: `max(${6 - index}px, 3px)`,
+                          height: `max(${6 - index}px, 3px)`,
+                          bgcolor:
+                            index === 0
+                              ? "primary.solidBg"
+                              : "background.level3",
+                        }}
+                      />
+                    ))}
+                  </Box>
+                </Box>
+                <Link
+                  to="/"
+                  component="button"
+                  underline="none"
+                  fontSize="sm"
+                  fontWeight="lg"
+                  textColor="text.primary"
+                >
+                  {item.likes.length} Likes
+                </Link>
+                <Typography fontSize="sm">
                   <Link
                     to={
                       item.postedBy._id !== state._id
                         ? "/profile/" + item.postedBy._id
                         : "/profile"
                     }
+                    style={{
+                      fontWeight: "500",
+                      fontSize: "15px",
+                      marginRight: "5px",
+                    }}
                   >
                     {item.postedBy.name}
-                  </Link>
+                  </Link>{" "}
+                  {item.title}
                 </Typography>
-                <IconButton
-                  variant="plain"
-                  color="neutral"
-                  size="sm"
-                  sx={{ ml: "auto" }}
-                >
-                </IconButton>
-              </Box>
-              <CardOverflow>
-                <AspectRatio>
-                  <img src={item.photo} alt="" />
-                </AspectRatio>
-              </CardOverflow>
-              <Box
-                sx={{ display: "flex", alignItems: "center", mx: -1, my: 1 }}
-              >
-                <Box sx={{ width: 0, display: "flex", gap: 0.5 }}>
-                  {item.likes.includes(state._id) ? (
-                    <i
-                      className="material-icons"
-                      onClick={() => {
-                        unlikePost(item._id);
-                      }}
-                      style={{ color: "red" }}
-                    >
-                      favorite
-                    </i>
-                  ) : (
-                    <i
-                      className="material-icons"
-                      onClick={() => {
-                        likePost(item._id);
-                      }}
-                    >
-                      favorite_border
-                    </i>
-                  )}
-                  <>
-                    <i
-                      style={{ marginRight: "-24px" }}
-                      className="material-icons"
-                      onClick={() => {
-                        handleShowComment(item._id);
-                      }}
-                    >
-                      comments
-                    </i>
-                    <Typography fontWeight="lg" level="h4">
-                      {item.comments.length}
-                    </Typography>
-                  </>
-                </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 0.5,
-                    mx: "auto",
-                  }}
-                >
-                  {[...Array(5)].map((_, index) => (
-                    <Box
-                      key={index}
+
+                <CardOverflow sx={{ p: "var(--Card-padding)" }}>
+                  {postId === item._id && comment ? (
+                    <>
+                      <Typography
+                        fontSize="lg"
+                        justifyContent="center"
+                        fontWeight="lg"
+                        lineHeight={0}
+                      >
+                        comments
+                      </Typography>
+                      {item.comments.map((record) => {
+                        return (
+                          <h6 key={record._id}>
+                            <span
+                              style={{ fontWeight: "500", fontSize: "14px" }}
+                            >
+                              {record.postedBy.name}
+                            </span>{" "}
+                            {record.text}{" "}
+                            {record.postedBy._id === state._id && (
+                              <i
+                                className="material-icons"
+                                style={{ fontSize: "12px", marginLeft: "5rem" }}
+                                onClick={() => {
+                                  if (
+                                    window.confirm(`Sure to Delete Comment?`)
+                                  ) {
+                                    deleteComment(item._id, record._id);
+                                  }
+                                }}
+                              >
+                                delete
+                              </i>
+                            )}
+                          </h6>
+                        );
+                      })}
+                    </>
+                  ) : null}
+
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      makeComment(e.target[0].value, item._id);
+                    }}
+                  >
+                    <Input
+                      variant="plain"
+                      size="sm"
+                      placeholder="Add a comment…"
                       sx={{
-                        borderRadius: "50%",
-                        width: `max(${6 - index}px, 3px)`,
-                        height: `max(${6 - index}px, 3px)`,
-                        bgcolor:
-                          index === 0 ? "primary.solidBg" : "background.level3",
+                        flexGrow: 1,
+                        mr: 1,
+                        "--Input-focusedThickness": "0px",
                       }}
                     />
-                  ))}
-                </Box>
-              </Box>
-              <Link
-                to="/"
-                component="button"
-                underline="none"
-                fontSize="sm"
-                fontWeight="lg"
-                textColor="text.primary"
-              >
-                {item.likes.length} Likes
-              </Link>
-              <Typography fontSize="sm">
-                <Link
-                  to={
-                    item.postedBy._id !== state._id
-                      ? "/profile/" + item.postedBy._id
-                      : "/profile"
-                  }
-                  style={{
-                    fontWeight: "500",
-                    fontSize: "15px",
-                    marginRight: "5px",
-                  }}
-                >
-                  {item.postedBy.name}
-                </Link>{" "}
-                {item.title}
-              </Typography>
+                  </form>
 
-              <CardOverflow sx={{ p: "var(--Card-padding)" }}>
-                {postId === item._id && comment ? (
-                  <>
-                    <Typography
-                      fontSize="lg"
-                      justifyContent="center"
-                      fontWeight="lg"
-                      lineHeight={0}
-                    >
-                      comments
-                    </Typography>
-                    {item.comments.map((record) => {
-                      return (
-                        <h6 key={record._id}>
-                          <span style={{ fontWeight: "500", fontSize: "14px" }}>
-                            {record.postedBy.name}
-                          </span>{" "}
-                          {record.text}{" "}
-                          {record.postedBy._id === state._id && (
-                            <i
-                              className="material-icons"
-                              style={{ fontSize: "12px", marginLeft: "5rem" }}
-                              onClick={() => {
-                                if (window.confirm(`Sure to Delete Comment?`)) {
-                                  deleteComment(item._id, record._id);
-                                }
-                              }}
-                            >
-                              delete
-                            </i>
-                          )}
-                        </h6>
-                      );
-                    })}
-                  </>
-                ) : null}
-
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    makeComment(e.target[0].value, item._id);
-                  }}
-                >
-                  <Input
-                    variant="plain"
-                    size="sm"
-                    placeholder="Add a comment…"
-                    sx={{
-                      flexGrow: 1,
-                      mr: 1,
-                      "--Input-focusedThickness": "0px",
-                    }}
-                  />
-                </form>
-
-                <p style={{ fontSize: "10px", color: "text.tertiary" }}>
-                  {format(item.createdAt)}
-                </p>
-              </CardOverflow>
-            </Card>
-          </div>
-        );
-      })}
-    </div>
+                  <p style={{ fontSize: "10px", color: "text.tertiary" }}>
+                    {format(item.createdAt)}
+                  </p>
+                </CardOverflow>
+              </Card>
+            </div>
+          );
+        })}
+      </div>
+      <BottomNavbar />
+    </>
   );
 }
 

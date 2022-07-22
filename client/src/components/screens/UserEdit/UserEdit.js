@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import { useParams } from "react-router-dom";
 import { UserContext } from "../../../App";
 import PropTypes from "prop-types";
@@ -8,6 +8,8 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import M from "materialize-css";
 import { Audio } from "react-loader-spinner";
+import BottomNavbar from "../../BottomNavbar/BottomNavbar";
+import Navbar from "../../Navbar/Navbar";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -52,6 +54,7 @@ function UserEdit() {
   const [newPassword, setNewPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
   const { state, dispatch } = useContext(UserContext);
+  const [img,setImg] = useState("")
 
   useEffect(() => {
     fetch(`/edituser/${userId}`, {
@@ -102,40 +105,60 @@ function UserEdit() {
       });
   };
 
-  useEffect(() => {
-    if (image) {
-      const data = new FormData();
-      data.append("file", image);
-      data.append("upload_preset", "project2");
-      data.append("cloud_name", "ameen123");
-      fetch("https://api.cloudinary.com/v1_1/ameen123/image/upload", {
-        method: "post",
-        body: data,
-      })
-        .then((res) => res.json())
-        .then((data) => {
-        fetch('/updatepic',{
-          method:"put",
-          headers:{
-            "Content-Type": "application/json",
-        Authorization: "Bearer " + sessionStorage.getItem("jwt"),
-          },
-          body:JSON.stringify({
-            pic: data.url
-          })
-        }).then(res=>res.json()).then(result=>{
-          sessionStorage.setItem("user", JSON.stringify({...state,pic:result.pic}));
-          dispatch({ type: "UPDATEPIC", payload: { pic: result.pic } });
-        })
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+  const onImageChange = (event) => {
+    setImage(event.target.files[0]);
+    if (event.target.files && event.target.files[0]) {
+      let reader = new FileReader();
+      reader.onload = (e) => {
+        setImg(e.target.result);
+      };
+      reader.readAsDataURL(event.target.files[0]);
     }
-  }, [image]);
+  };
 
-  const updatePhoto = (file) => {
-    setImage(file);
+  const updatePhoto = () => {
+    
+      if (!img) {
+        return M.toast({
+          html: "please choose an image by clicking the photo",
+          classes: "#ef5350 red lighten-1",
+        });
+      }
+        const data = new FormData();
+        data.append("file", image);
+        data.append("upload_preset", "project2");
+        data.append("cloud_name", "ameen123");
+        fetch("https://api.cloudinary.com/v1_1/ameen123/image/upload", {
+          method: "post",
+          body: data,
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            fetch("/updatepic", {
+              method: "put",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + sessionStorage.getItem("jwt"),
+              },
+              body: JSON.stringify({
+                pic: data.url,
+              }),
+            })
+              .then((res) => res.json())
+              .then((result) => {
+                sessionStorage.setItem(
+                  "user",
+                  JSON.stringify({ ...state, pic: result.pic })
+                );
+                dispatch({ type: "UPDATEPIC", payload: { pic: result.pic } });
+                M.toast({ html: "updated", classes: "#00e676 green accent-3" });
+                setImg("")
+              });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      
   };
 
   const updatePassword = () => {
@@ -178,6 +201,7 @@ function UserEdit() {
 
   return (
     <>
+      <Navbar />
       <Box
         className="card"
         sx={{
@@ -208,28 +232,28 @@ function UserEdit() {
           {user ? (
             <>
               <div>
-                <img
-                  src={state.pic}
-                  alt="no imag.."
-                  style={{
-                    width: "160px",
-                    height: "160px",
-                    borderRadius: "80px",
-                  }}
-                />
+                <label htmlFor="file">
+                  <img
+                    src={ img ? img :  state.pic}
+                    alt="no imag.."
+                    style={{
+                      width: "160px",
+                      height: "160px",
+                      borderRadius: "80px",
+                    }}
+                    id="target"
+                  />
+                  <input
+                    id="file"
+                    style={{ display: "none" }}
+                    type="file"
+                    onChange={onImageChange}
+                  />
+                </label>
                 <div>
-                  <div className="file-field input-field">
-                    <div className="btn #42a5f5 blue darken-1">
-                      <span>change profile picture</span>
-                      <input
-                        type="file"
-                        onChange={(e) => updatePhoto(e.target.files[0])}
-                      />
-                    </div>
-                    <div className="file-path-wrapper">
-                      <input className="file-path validate" type="text" />
-                    </div>
-                  </div>
+                  <button className="btn waves-effect waves-light #42a5f5 blue darken-1" onClick={()=>updatePhoto()}>
+                    update
+                  </button>
                 </div>
               </div>
               <div
@@ -309,6 +333,7 @@ function UserEdit() {
           </div>
         </TabPanel>
       </Box>
+      <BottomNavbar />
     </>
   );
 }

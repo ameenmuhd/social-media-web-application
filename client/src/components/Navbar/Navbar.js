@@ -38,9 +38,9 @@ function Navbar() {
             {state ? (
               <div>
                 <Link to={`/chat/${state._id}`}>
-                <IconButton sx={{color:"black"}}> 
-                  <MapsUgcIcon />
-                </IconButton>
+                  <IconButton sx={{ color: "black" }}>
+                    <MapsUgcIcon />
+                  </IconButton>
                 </Link>
 
                 <IconButton onClick={handleMenu}>

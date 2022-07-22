@@ -24,7 +24,6 @@ router.get('/chatcontacts/:id',requireLogin,async (req,res)=>{
 
 router.post('/addmsg',requireLogin,async (req,res)=>{
     try {
-        console.log(req.body);
         const {from,to,message} = req.body
         const data = await Chat.create({
             message:{text:message},
@@ -44,7 +43,6 @@ router.post('/addmsg',requireLogin,async (req,res)=>{
 
 router.post('/getmsg',requireLogin,async (req,res)=>{
     try {
-        console.log(req.body);
         const {from,to} = req.body
         const messages = await Chat.find({
             users:{
@@ -54,7 +52,8 @@ router.post('/getmsg',requireLogin,async (req,res)=>{
         const projectedMessages = messages.map((msg)=>{
             return{
                 fromSelf:msg.sender.toString() === from,
-                message: msg.message.text
+                message: msg.message.text,
+                createdAt: msg.createdAt
             }
         })
         res.json(projectedMessages)

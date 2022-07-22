@@ -1,5 +1,4 @@
 import React,{useEffect,createContext,useReducer,useContext} from 'react';
-import Navbar from './components/Navbar/Navbar';
 import './App.css';
 import {BrowserRouter,Route, Routes, useLocation, useNavigate} from 'react-router-dom';
 import Home from './components/screens/Home';
@@ -14,6 +13,7 @@ import EditPost from './components/screens/EditPost';
 import UserEdit from './components/screens/UserEdit/UserEdit';
 import BottomNavbar from './components/BottomNavbar/BottomNavbar';
 import Chat from './components/screens/Chat';
+import MarketPlace from './components/screens/MarketPlace';
 
 export const UserContext = createContext()
 
@@ -40,6 +40,7 @@ const Routing = ()=>{
     <Route path='/editpost/:postId' element={<EditPost />}></Route>
     <Route path='/edituser/:userId' element={<UserEdit />}></Route>
     <Route path='/chat/:userId' element={<Chat />}></Route>
+    <Route path='/marketplace' element={<MarketPlace />}></Route>
     </Routes>
   )
 }
@@ -51,9 +52,8 @@ function App() {
   return (
     <UserContext.Provider value={{state,dispatch}}>
     <BrowserRouter>
-    <Navbar/>
     <Routing/>
-    <BottomNavbar/>
+    {/* <BottomNavbar/> */}
     </BrowserRouter>
     </UserContext.Provider>
   );

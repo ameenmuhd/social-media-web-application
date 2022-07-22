@@ -2,11 +2,14 @@ import Avatar from "@mui/joy/Avatar";
 import IconButton from "@mui/joy/IconButton";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import CircleIcon from "@mui/icons-material/Circle";
+import { width } from "@mui/system";
 
-function Contacts({ contacts, currentUser, changeChat }) {
+function Contacts({ contacts, currentUser, changeChat, onlineUsers }) {
   const [currentUserName, setCurrentUserName] = useState(undefined);
   const [currentUserImage, setCurrentUserImage] = useState(undefined);
   const [currentSelected, setCurrentSelected] = useState(undefined);
+  console.log('dsa',onlineUsers,contacts);
 
   useEffect(() => {
     if (currentUser) {
@@ -44,6 +47,26 @@ function Contacts({ contacts, currentUser, changeChat }) {
                   </div>
                   <div className="username">
                     <h3>{contact.name}</h3>
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "flex-end",
+                      justifyContent: "flex-end",
+                      width: "16rem",
+                    }}
+                  >
+                    {onlineUsers.map((online)=>{
+
+                    { contact._id && online._id && <CircleIcon
+                      size="sm"
+                      sx={{
+                        color: "#7CFC00",
+                        marginTop: "1px",
+                        fontSize: "1.3rem",
+                      }}
+                    />}
+                    })}
                   </div>
                 </div>
               );

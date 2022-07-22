@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import M from "materialize-css";
 import { Audio } from "react-loader-spinner";
+import BottomNavbar from "../BottomNavbar/BottomNavbar";
+import Navbar from "../Navbar/Navbar";
 
 function EditPost() {
   const { postId } = useParams();
@@ -13,7 +15,7 @@ function EditPost() {
   const [image, setImage] = useState("");
   const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
-  
+
   useEffect(() => {
     if (!sessionStorage.getItem("user")) {
       navigate("/login");
@@ -113,6 +115,7 @@ function EditPost() {
 
   return (
     <>
+    <Navbar/>
       {post ? (
         <div
           className="card input-field"
@@ -168,6 +171,7 @@ function EditPost() {
           <Audio height="100" width="100" color="red" ariaLabel="loading" />
         </div>
       )}
+      <BottomNavbar />
     </>
   );
 }
