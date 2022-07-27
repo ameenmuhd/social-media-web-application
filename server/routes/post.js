@@ -85,6 +85,13 @@ router.put('/unlike',requireLogin,(req,res)=>{
     })
 })
 
+// router.get('/getcomments/:postId',requireLogin,(req,res)=>{
+//     Post.findById(req.params.postId).then((resp)=>{
+//         console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',resp);
+//         res.json(resp)
+//     })
+// })
+
 router.put('/comment',requireLogin,(req,res)=>{
     const comment = {
         text:req.body.text,

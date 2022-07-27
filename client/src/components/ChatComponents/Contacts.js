@@ -4,12 +4,16 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import CircleIcon from "@mui/icons-material/Circle";
 import { width } from "@mui/system";
+import { Link } from "react-router-dom";
+import AddIcon from "@mui/icons-material/Add";
+import Button from "@mui/material/Button";
+import GroupChatModal from "./GroupChatModal";
 
 function Contacts({ contacts, currentUser, changeChat, onlineUsers }) {
   const [currentUserName, setCurrentUserName] = useState(undefined);
   const [currentUserImage, setCurrentUserImage] = useState(undefined);
   const [currentSelected, setCurrentSelected] = useState(undefined);
-  console.log('dsa',onlineUsers,contacts);
+  console.log("dsa", onlineUsers, contacts);
 
   useEffect(() => {
     if (currentUser) {
@@ -27,8 +31,18 @@ function Contacts({ contacts, currentUser, changeChat, onlineUsers }) {
     <>
       {currentUserImage && currentUserName && (
         <Container>
-          <div className="brand">
-            <h3>Logo</h3>
+          <div className="brand brand-logo">
+            <Link to="/">
+              <p style={{ fontSize: "2.2rem" }}>Logo</p>
+            </Link>
+          <div>
+            <GroupChatModal>
+
+            <Button variant="contained" endIcon={<AddIcon />}>
+              create group
+            </Button>
+            </GroupChatModal>
+          </div>
           </div>
           <div className="contacts">
             {contacts.map((contact, index) => {
@@ -56,16 +70,19 @@ function Contacts({ contacts, currentUser, changeChat, onlineUsers }) {
                       width: "16rem",
                     }}
                   >
-                    {onlineUsers.map((online)=>{
-
-                    { contact._id && online._id && <CircleIcon
-                      size="sm"
-                      sx={{
-                        color: "#7CFC00",
-                        marginTop: "1px",
-                        fontSize: "1.3rem",
-                      }}
-                    />}
+                    {onlineUsers.map((online) => {
+                      {
+                        contact._id && online._id && (
+                          <CircleIcon
+                            size="sm"
+                            sx={{
+                              color: "#7CFC00",
+                              marginTop: "1px",
+                              fontSize: "1.3rem",
+                            }}
+                          />
+                        );
+                      }
                     })}
                   </div>
                 </div>
@@ -92,14 +109,15 @@ const Container = styled.div`
   display: grid;
   grid-template-rows: 10% 75% 15%;
   overflow: hidden;
-  background-color: #080420;
+  background-color: #fff;
   .brand {
     display: flex;
     align-items: center;
     gap: 1rem;
     justify-content: center;
+    background-color: #f8f8f8;
     h3 {
-      color: white;
+      color: black;
       text-transform: uppercase;
       font-size: 20px;
     }
@@ -123,7 +141,7 @@ const Container = styled.div`
       min-height: 5rem;
       cursor: pointer;
       width: 90%;
-      border-radius: 0.2rem;
+      border-bottom: 1px solid #f1f1f1;
       padding: 0.4rem;
       display: flex;
       gap: 0.6rem;
@@ -135,18 +153,17 @@ const Container = styled.div`
       }
       .username {
         h3 {
-          color: white;
           font-size: 1rem;
           margin-bottom: 30px;
         }
       }
     }
     .selected {
-      background-color: #9a86f3;
+      background-color: #f0f2f5;
     }
   }
   .current-user {
-    background-color: #0d0d30;
+    background-color: #f8f8f8;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -157,7 +174,6 @@ const Container = styled.div`
     }
     .username {
       h2 {
-        color: white;
         font-size: 1rem;
         margin-bottom: 40px;
       }

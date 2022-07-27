@@ -171,4 +171,38 @@ router.put('/updatepic',requireLogin,(req,res)=>{
   })
 })
 
+router.post('/search-users',requireLogin,(req,res)=>{
+  console.log(req.body);
+  try {
+    let userPattern = new RegExp('^'+req.body.query)
+    User.find({name:{$regex:userPattern}}).select('-password')
+    .then((user)=>{
+      res.json({user})
+    }).catch(err=>{
+      console.log(err);
+    })
+  } catch (error) {
+    console.log(error);
+  }
+})
+
+router.get('/search-users-chat',requireLogin,async (req,res)=>{
+  try {   
+    console.log(req.query);
+    const keyword = req.query.search
+      ? {
+          $or: [
+            { name: { $regex: req.query.search, $options: "i" } },
+            { email: { $regex: req.query.search, $options: "i" } },
+          ],
+        }
+      : {};
+  
+      const users = await User.find(keyword).find({ _id: { $ne: req.user._id } });
+    res.send(users);
+  } catch (error) {
+    console.log(error);
+  }
+})
+
 module.exports = router;

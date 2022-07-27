@@ -1,4 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Grand+Hotel&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300&display=swap');
+
 
 a{
     color: black  !important;
@@ -6,6 +8,10 @@ a{
 
 .brand-logo, .brndname{
     font-family: 'Grand Hotel', cursive;
+}
+
+.heading-chat{
+    font-family: 'Source Sans Pro', sans-serif;
 }
 
 .marginNav{
@@ -25,14 +31,14 @@ a{
 }
 
 /* label underline focus color */
-.input-field input[type=text]:focus {
+/* .input-field input[type=text]:focus {
     border-bottom: 1px solid rgb(47, 125, 249) !important;
     box-shadow: 0 1px 0 0 rgb(47, 125, 249) !important;
 }
 .input-field input[type=password]:focus {
     border-bottom: 1px solid rgb(47, 125, 249) !important;
     box-shadow: 0 1px 0 0 rgb(47, 125, 249) !important;
-}
+} */
 
 .gallery{
     display: flex;
@@ -59,4 +65,17 @@ a{
 .material-icons:hover{
     cursor: pointer;
 }
+
+::-webkit-scrollbar {
+    width: 0px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: rgba(136, 136, 136, 0.281);
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
 

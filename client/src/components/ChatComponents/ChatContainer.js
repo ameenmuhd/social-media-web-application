@@ -104,7 +104,7 @@ function ChatContainer({ currentChat, currentUser, socket }) {
                     }`}
                   >
                     <div className="content">
-                      <p>{message.message}</p>
+                      <p className="text-co" style={{whiteSpace: 'pre-line'}}>{message.message}</p>
                       <div>
                         <span
                           style={{ fontSize: "10px", color: "text.tertiary" }}
@@ -135,6 +135,7 @@ const Container = styled.div`
   }
   .chat-header {
     display: flex;
+    background-color: #f8f8f8;
     justify-content: space-between;
     align-items: center;
     padding: 0 2rem;
@@ -148,7 +149,6 @@ const Container = styled.div`
       }
       .username {
         h3 {
-          color: white;
           font-size: 1.6rem;
           margin-bottom: 40px;
         }
@@ -160,11 +160,12 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    background-color: #fff;
     overflow: auto;
     &::-webkit-scrollbar {
       width: 0.2rem;
       &-thumb {
-        background-color: #ffffff39;
+        background-color: #f8f8f8;
         width: 0.1rem;
         border-radius: 1rem;
       }
@@ -178,7 +179,6 @@ const Container = styled.div`
         padding: 1rem;
         font-size: 1.1rem;
         border-radius: 1rem;
-        color: #d1d1d1;
         @media screen and (min-width: 360px) and (max-width: 480px) {
           max-width: 70%;
         }
@@ -187,13 +187,13 @@ const Container = styled.div`
     .sended {
       justify-content: flex-end;
       .content {
-        background-color: #4f04ff21;
+        background-color: #4b3d6c;
       }
     }
     .recieved {
       justify-content: flex-start;
       .content {
-        background-color: #9900ff20;
+        background-color: #ebecf2;
       }
     }
   }

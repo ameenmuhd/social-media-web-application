@@ -1,0 +1,32 @@
+.column {
+    float: left;
+    width: 25%;
+    padding: 0 30px;
+    margin-bottom: 20px;
+    margin-right: auto;
+      margin-left: auto;
+  }
+  
+  /* Remove extra left and right margins, due to padding in columns */
+  .row {
+    margin: 0 -5px;
+    margin-top: 90px;
+    }
+  
+  /* Clear floats after the columns */
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+  
+  /* Responsive columns - one column layout (vertical) on small screens */
+  @media screen and (max-width: 600px) {
+    .column {
+      width: 100%;
+      display: block;
+      margin-right: auto;
+      margin-left: auto;
+      margin-bottom: 20px;
+    }
+  }

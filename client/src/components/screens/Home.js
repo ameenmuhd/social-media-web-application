@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
 import { UserContext } from "../../App";
 import { Link, useNavigate } from "react-router-dom";
 import M from "materialize-css";
@@ -15,12 +15,12 @@ import { styled, alpha } from "@mui/material/styles";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import EditIcon from "@mui/icons-material/Edit";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Navbar from "../Navbar/Navbar";
 import BottomNavbar from "../BottomNavbar/BottomNavbar";
-import swal from 'sweetalert';
+import swal from "sweetalert";
+import { display } from "@mui/system";
+// import CommentModal from "../commentModal/CommentModal";
 
 function Home() {
   const [comment, showComment] = useState(false);
@@ -299,54 +299,7 @@ function Home() {
                     color="neutral"
                     size="sm"
                     sx={{ ml: "auto" }}
-                  >
-                    {/* <>
-                    <div>
-                    <IconButton
-                    aria-label="more"
-                        id="long-button"
-                        aria-controls={
-                          open ? "demo-customized-menu" : undefined
-                        }
-                        aria-haspopup="true"
-                        aria-expanded={open ? "true" : undefined}
-                        variant="contained"
-                        disableElevation
-                        onClick={handleClick}
-                        endIcon={<KeyboardArrowDownIcon />}
-                        >
-                        <MoreVertIcon />
-                        </IconButton>
-                        <StyledMenu
-                        id="demo-customized-menu"
-                        MenuListProps={{
-                          "aria-labelledby": "demo-customized-button",
-                        }}
-                        anchorEl={anchorEl}
-                        open={open}
-                        onClose={handleClose}
-                      >
-                        <Link to={`/editpost/${item._id}`}>
-                          <MenuItem onClick={handleClose} disableRipple>
-                          <EditIcon />
-                            Edit
-                            </MenuItem>
-                        </Link>
-                        <MenuItem
-                          onClick={() => {
-                            if (window.confirm(`Sure to Delete Post?`)) {
-                              deletPost(item._id);
-                            }
-                          }}
-                          disableRipple
-                          >
-                          <DeleteForeverIcon />
-                          Delete
-                        </MenuItem>
-                      </StyledMenu>
-                      </div>
-                    </> */}
-                  </IconButton>
+                  ></IconButton>
                   {item.postedBy._id === state._id ? (
                     <>
                       <Link to={`/editpost/${item._id}`}>
@@ -357,12 +310,11 @@ function Home() {
                       <MenuItem
                         onClick={() => {
                           swal({
-                            title: "Are you sure to delete comment?",
+                            title: "Are you sure to delete post?",
                             icon: "warning",
                             buttons: true,
                             dangerMode: true,
-                          })
-                          .then((willDelete) => {
+                          }).then((willDelete) => {
                             if (willDelete) {
                               deletPost(item._id);
                               swal("Your post has been deleted!", {
@@ -410,15 +362,17 @@ function Home() {
                       </i>
                     )}
                     <>
+                      {/* <CommentModal postId = {item}> */}
                       <i
                         style={{ marginRight: "-24px" }}
                         className="material-icons"
                         onClick={() => {
                           handleShowComment(item._id);
                         }}
-                      >
+                        >
                         comments
                       </i>
+                        {/* </CommentModal> */}
                       <Typography fontWeight="lg" level="h4">
                         {item.comments.length}
                       </Typography>
@@ -487,6 +441,15 @@ function Home() {
                       >
                         comments
                       </Typography>
+                      
+                      <Box 
+                      sx={{
+                        height:"100px",
+                        overflowY:"scroll",
+                        justifyContent:"space-between"
+                      }}
+                      >
+            
                       {item.comments.map((record) => {
                         return (
                           <h6 key={record._id}>
@@ -498,16 +461,15 @@ function Home() {
                             {record.text}{" "}
                             {record.postedBy._id === state._id && (
                               <i
-                                className="material-icons"
-                                style={{ fontSize: "12px", marginLeft: "5rem" }}
+                              className="material-icons"
+                                style={{ fontSize: "12px",display:"inline-flex",justifyContent:'end' }}
                                 onClick={() => {
                                   swal({
                                     title: "Are you sure to delete comment?",
                                     icon: "warning",
                                     buttons: true,
                                     dangerMode: true,
-                                  })
-                                  .then((willDelete) => {
+                                  }).then((willDelete) => {
                                     if (willDelete) {
                                       deleteComment(item._id, record._id);
                                       swal("Your comment has been deleted!", {
@@ -516,13 +478,14 @@ function Home() {
                                     }
                                   });
                                 }}
-                              >
+                                >
                                 delete
                               </i>
                             )}
                           </h6>
                         );
                       })}
+                      </Box>
                     </>
                   ) : null}
 

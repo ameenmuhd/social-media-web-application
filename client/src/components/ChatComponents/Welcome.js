@@ -7,7 +7,7 @@ function Welcome({ currentUser }) {
     <Container>
       <img src={Robot} alt="Robot" />
       <h1>
-        Welcome, <span>{currentUser.name}!</span>
+        Welcome, <span>{currentUser}!</span>
         <h3>Start Connecting</h3>
       </h1>
     </Container>
@@ -18,7 +18,6 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  color: white;
   flex-direction: column;
   img {
     height: 20rem;

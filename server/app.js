@@ -20,6 +20,9 @@ mongoose.connection.on("error", (err) => {
 require("./models/user");
 require("./models/post");
 require("./models/chat");
+require("./models/product");
+require("./models/chatModel");
+require("./models/messageModel");
 
 app.use(express.json());
 app.use(cors());
@@ -29,48 +32,48 @@ app.use(require("./routes/post"));
 app.use(require("./routes/user"));
 app.use(require("./routes/chat"));
 app.use(require("./routes/admin"));
+app.use(require("./routes/marketplace"));
 
 const server = app.listen(PORT, () => {
   console.log("server is running on", PORT);
 });
 
-const io = socket(server, {
+const io = require("socket.io")(server, {
+  pingTimeout: 60000,
   cors: {
     origin: "http://localhost:3000",
-    Credential: true,
+    // credentials: true,
   },
 });
 
-global.onlineUsers = new Map();
-
-let users = [];
-
-const addUser = (userId, socketId) => {
-  !users.some((user) => user.userId === userId) &&
-    users.push({ userId, socketId });
-};
-
-const removeUser = (socketId) => {
-  users = users.filter((user) => user.socketId !== socketId);
-};
-
 io.on("connection", (socket) => {
-  console.log("user connected");
-  global.chatSocket = socket;
-  socket.on("add-user", (userId) => {
-    onlineUsers.set(userId, socket.id);
-    addUser(userId, socket.id);
-    io.emit("getUsers", users);
+  console.log("Connected to socket.io");
+  socket.on("setup", (userData) => {
+    socket.join(userData._id);
+    socket.emit("connected");
   });
-  socket.on("send-msg", (data) => {
-    const sendUserSocket = onlineUsers.get(data.to);
-    if (sendUserSocket) {
-      socket.to(sendUserSocket).emit("msg-recieve", data.message);
-    }
+
+  socket.on("join chat", (room) => {
+    socket.join(room);
+    console.log("User Joined Room: " + room);
   });
-  socket.on("disconnect", () => {
-    console.log("disconnected");
-    removeUser(socket.id)
-    io.emit("getUsers", users);
+  socket.on("typing", (room) => socket.in(room).emit("typing"));
+  socket.on("stop typing", (room) => socket.in(room).emit("stop typing"));
+
+  socket.on("new message", (newMessageRecieved) => {
+    var chat = newMessageRecieved.chat;
+
+    if (!chat.users) return console.log("chat.users not defined");
+
+    chat.users.forEach((user) => {
+      if (user._id == newMessageRecieved.sender._id) return;
+
+      socket.in(user._id).emit("message recieved", newMessageRecieved);
+    });
+  });
+
+  socket.off("setup", () => {
+    console.log("USER DISCONNECTED");
+    socket.leave(userData._id);
   });
 });

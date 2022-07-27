@@ -11,9 +11,13 @@ import UserProfile from './components/screens/UserProfile';
 import FollowingUsersPost from './components/screens/FollowingUsersPost';
 import EditPost from './components/screens/EditPost';
 import UserEdit from './components/screens/UserEdit/UserEdit';
-import BottomNavbar from './components/BottomNavbar/BottomNavbar';
 import Chat from './components/screens/Chat';
-import MarketPlace from './components/screens/MarketPlace';
+import MarketPlace from './components/MarketPlace/MarketPlace';
+import SellProduct from './components/MarketPlace/SellProduct';
+import ChatProvider from './Context/ChatProvider';
+import AdminLogin from './components/screens/AdminLogin';
+import AdminHome from './components/AdminComponents/AdminHome';
+import ProductDetails from './components/MarketPlace/ProductDetails';
 
 export const UserContext = createContext()
 
@@ -41,6 +45,10 @@ const Routing = ()=>{
     <Route path='/edituser/:userId' element={<UserEdit />}></Route>
     <Route path='/chat/:userId' element={<Chat />}></Route>
     <Route path='/marketplace' element={<MarketPlace />}></Route>
+    <Route path='/sell' element={<SellProduct />}></Route>
+    <Route path='/product-details/:productId' element={<ProductDetails />}></Route>
+    <Route path='/adminlogin' element={<AdminLogin />}></Route>
+    <Route path='/admin' element={<AdminHome />}></Route>
     </Routes>
   )
 }
@@ -51,10 +59,12 @@ function App() {
      
   return (
     <UserContext.Provider value={{state,dispatch}}>
+    <ChatProvider>
     <BrowserRouter>
     <Routing/>
     {/* <BottomNavbar/> */}
     </BrowserRouter>
+    </ChatProvider>
     </UserContext.Provider>
   );
 }

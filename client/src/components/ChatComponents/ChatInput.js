@@ -35,7 +35,7 @@ function ChatInput({ handleSendMsg }) {
         </div>
       </div>
       <form className="input-container" onSubmit={(e) => sendChat(e)}>
-        <input
+        <textarea
           type="text"
           placeholder="type..."
           value={msg}
@@ -56,7 +56,7 @@ const Container = styled.div`
   display: grid;
   align-items: center;
   grid-template-columns: 5% 95%;
-  background-color: #080420;
+  background-color: #f0f2f5;
   padding: 0 2rem;
   @media screen and (min-width: 360px) and (max-width: 480px) {
     padding: 0 1rem;
@@ -108,17 +108,17 @@ const Container = styled.div`
     display: flex;
     align-items: center;
     gap: 2rem;
-    background-color: #ffffff34;
-    input {
+    background-color: #fff;
+    textarea {
       width: 90%;
       height: 60%;
       background-color: transparent;
-      color: white;
       border: none;
       padding-left: 1rem;
       font-size: 1.2rem;
       border-bottom: none !important;
       box-shadow: none !important;
+      resize: none;
       &::selection {
         background-color: #9a86f3;
       }
