@@ -4,6 +4,12 @@ import MarketPlaceNav from "../MarketPlaceNav/MarketPlaceNav";
 import M from "materialize-css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+import LinearProgress from '@mui/material/LinearProgress';
+
 
 function SellProduct() {
   const [title, setTitle] = useState("");
@@ -14,6 +20,13 @@ function SellProduct() {
   const [image, setImage] = useState("");
   const [url, setUrl] = useState("");
   const navigate = useNavigate();
+  const [age, setAge] = React.useState("");
+  const [allCategory,setAllCategory] = useState([])
+  const [loading,setLoading] = useState(false)
+
+  const handleChange = (event) => {
+    setAge(event.target.value);
+  };
 
   useEffect(() => {
     if (!sessionStorage.getItem("user")) {
@@ -21,40 +34,52 @@ function SellProduct() {
     }
   }, []);
 
-  useEffect(()=>{
-    if(url){
-        const postProduct = async () => {
-            const response = await axios.post(
-              "/sellproduct",
-              {
-                title,
-                price,
-                category,
-                location,
-                description,
-                url 
-              },
-              {
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: "Bearer " + sessionStorage.getItem("jwt"),
-                },
-              }
-            );
-            console.log(response);
-            // setMessages(response.data);
-          };
-          postProduct();
-    }
-  },[url])
+  React.useEffect(() => {
+    const fetchCategory = async () => {
+      const { data } = await axios.get("/allcategory");
+      setAllCategory(data.category);
+    };
+    fetchCategory();
+  }, [allCategory]);
 
+  useEffect(() => {
+    if (url) {
+      const postProduct = async () => {
+        const response = await axios.post(
+          "/sellproduct",
+          {
+            title,
+            price,
+            category,
+            location,
+            description,
+            url,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + sessionStorage.getItem("jwt"),
+            },
+          }
+        );
+        console.log(response);
+        // setMessages(response.data);
+        navigate("/marketplace");
+      };
+      postProduct();
+      setLoading(false)
+    }
+  }, [url]);
 
   const postDetails = async () => {
+    setLoading(true)
     if (!image || !description || !location || !category || !price || !title) {
-      return M.toast({
+        M.toast({
         html: "please add all fields",
         classes: "#ef5350 red lighten-1",
-      });
+      })
+      setLoading(false)
+      return
     }
     const data = new FormData();
     data.append("file", image);
@@ -76,6 +101,10 @@ function SellProduct() {
   return (
     <div>
       <MarketPlaceNav />
+      {loading ? 
+      <LinearProgress sx={{marginTop:"68px"}}/>
+      : ""
+      }
       <div
         className="card input-field"
         style={{
@@ -85,7 +114,7 @@ function SellProduct() {
           textAlign: "center",
           marginTop: "100px",
         }}
-      >
+        >
         <input
           type="text"
           placeholder="Title"
@@ -98,19 +127,38 @@ function SellProduct() {
           value={price}
           onChange={(e) => setPrice(e.target.value)}
         />
-        <input
+        {/* <input
           type="text"
           placeholder="Category"
           value={category}
           onChange={(e) => setCategory(e.target.value)}
-        />
+        /> */}
+        <FormControl sx={{ minWidth: "100%" }} size="large">
+          <InputLabel id="demo-select-small">Category</InputLabel>
+          <Select
+            labelId="demo-select-small"
+            id="demo-select-small"
+            value={age}
+            label="Age"
+            onChange={handleChange}
+          >
+            <MenuItem value="">
+              <em>None</em>
+            </MenuItem>
+            {allCategory.map((item)=>{
+              return (
+              <MenuItem value={item._id} onClick={()=>setCategory(item.name)}>{item.name}</MenuItem>
+              )
+            })}
+          </Select>
+        </FormControl>
         <input
           type="text"
           placeholder="Location"
           value={location}
           onChange={(e) => setLocation(e.target.value)}
         />
-        <textarea
+        <input
           type="text"
           placeholder="Description"
           value={description}

@@ -1,51 +1,72 @@
-.viewParentDiv {
-    padding-top: 4em;
-    display: flex;
+.container{
+  width: 100%;
+  height: auto;
+  margin-top: 100px;
+  display: flex;
+  flex-direction: row;
+  flex-flow: wrap;
+  justify-content: center;
+}
+
+.container2{
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: row;
+  flex-flow: wrap;
+  justify-content: center;
+}
+
+.box3{
+  width: 60%;
+  height: 20%;
+  margin: 10px;
+  box-sizing: border-box;
+  border: .2rem solid black;
+}
+
+.box1{
+  width: 60%;
+  height: auto;
+  margin: 10px;
+  box-sizing: border-box;
+}
+
+.box2{
+  width: 30%;
+  height: 20%;
+  margin: 10px;
+  box-sizing: border-box;
+}
+
+
+
+@media screen and (max-width:800px) {
+  .box1{
+    width: 90%;
   }
-  .viewParentDiv .imageShowDiv {
-    padding: 16px;
-    width: 70vw;
+  .box2{
+    width: 90%;
   }
-  .viewParentDiv .imageShowDiv img {
-    width: 65vw;
-    height: 85vh;
+  .box3{
+    width: 90%;
   }
-  
-  .viewParentDiv .rightSection {
-    padding: 16px;
-    margin-top: 3em;
-    width: 30vw;
+  .box4{
+    width: 90%;
   }
-  
-  .viewParentDiv .rightSection .productDetails :first-child {
-    font-weight: 700;
-    margin-bottom: 8px;
-    color: #002f34;
-    font-size: 34px;
-    line-height: 32px;
-    margin-bottom: 20px;
+}
+
+@media screen and (max-width:600px) {
+  .box1{
+    width: 90%;
   }
-  
-  .viewParentDiv .rightSection .productDetails {
-    border: 1px solid black;
-    padding: 6px;
-    border-radius: 6px;
-    margin-bottom: 2em;
-    width: 100%;
+  .box2{
+    width: 90%;
   }
-  
-  .viewParentDiv .rightSection .contactDetails {
-    border: 1px solid black;
-    padding: 6px;
-    border-radius: 6px;
+  .box3{
+    width: 90%;
   }
-  
-  .viewParentDiv .rightSection .contactDetails :first-child {
-    font-size: 20px;
-    line-height: 24px;
-    font-weight: 700;
-    color: #002f34;
-    font-weight: 400;
-    padding: 0;
+  .box4{
+    width: 90%;
   }
-  
+}

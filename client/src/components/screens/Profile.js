@@ -54,8 +54,8 @@ function Profile() {
                   src={state ? state.pic : "loading..."}
                   alt="no imag.."
                   style={{
-                    width: "160px",
-                    height: "160px",
+                    width: "150px",
+                    height: "150px",
                     borderRadius: "80px",
                   }}
                 />

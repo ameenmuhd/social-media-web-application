@@ -62,12 +62,12 @@ function Signup() {
       return;
     }
     if (
-      !/^(\S)(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[~`!@#$%^&*()--+={}\[\]|\\:;"'<>,.?/_₹])[a-zA-Z0-9~`!@#$%^&*()--+={}\[\]|\\:;"'<>,.?/_₹]{6,16}$/.test(
+      !/^(\S)(?=.*[0-9])(?=.*[a-z])(?=.*[~`!@#$%^&*()--+={}\[\]|\\:;"'<>,.?/_₹])[a-zA-Z0-9~`!@#$%^&*()--+={}\[\]|\\:;"'<>,.?/_₹]{6,16}$/.test(
         password
       )
     ) {
       M.toast({
-        html: "password must contain one uppercase,lowercase,numeric,special character and must be 8-16",
+        html: "password must contain lowercase,numeric,special character and must be 8-16",
         classes: "#ef5350 red lighten-1",
       });
       return;

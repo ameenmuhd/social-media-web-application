@@ -1,12 +1,18 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import M from "materialize-css";
 import { useNavigate } from "react-router-dom";
 
 const AdminLogin = () => {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (sessionStorage.getItem("adminjwt")) {
+      navigate("/admin");
+    }
+  }, []);
 
   const postData = async () => {
     try {
@@ -16,12 +22,13 @@ const AdminLogin = () => {
           password,
         })
         .then((resp) => {
-          if(resp.data){
+          if (resp.data.type === "admin") {
             M.toast({
-                html: "signedin successfully",
-                classes: "#00e676 green accent-3",
-              });
-              navigate("/admin");
+              html: "signedin successfully",
+              classes: "#00e676 green accent-3",
+            });
+            sessionStorage.setItem("adminjwt", resp.data.token);
+            navigate("/admin");
           }
         })
         .catch((error) => {

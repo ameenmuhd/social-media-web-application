@@ -223,6 +223,37 @@ function Home() {
                     size="sm"
                     sx={{ ml: "auto" }}
                   ></IconButton>
+                  {item.postedBy._id === state._id ? (
+                    <>
+                      <Link to={`/editpost/${item._id}`}>
+                        <MenuItem onClick={handleClose} disableRipple>
+                          <EditIcon />
+                        </MenuItem>
+                      </Link>
+                      <MenuItem
+                        onClick={() => {
+                          swal({
+                            title: "Are you sure to delete post?",
+                            icon: "warning",
+                            buttons: true,
+                            dangerMode: true,
+                          }).then((willDelete) => {
+                            if (willDelete) {
+                              deletPost(item._id);
+                              swal("Your post has been deleted!", {
+                                icon: "success",
+                              });
+                            }
+                          });
+                        }}
+                        disableRipple
+                      >
+                        <DeleteForeverIcon />
+                      </MenuItem>
+                    </>
+                  ) : (
+                    ""
+                  )}
                 </Box>
                 <CardOverflow>
                   <AspectRatio>
@@ -254,15 +285,17 @@ function Home() {
                       </i>
                     )}
                     <>
+                      {/* <CommentModal postId = {item}> */}
                       <i
                         style={{ marginRight: "-24px" }}
                         className="material-icons"
                         onClick={() => {
                           handleShowComment(item._id);
                         }}
-                      >
+                        >
                         comments
                       </i>
+                        {/* </CommentModal> */}
                       <Typography fontWeight="lg" level="h4">
                         {item.comments.length}
                       </Typography>
@@ -331,7 +364,16 @@ function Home() {
                       >
                         comments
                       </Typography>
-                      {item.comments.map((record) => {
+                      
+                      <Box 
+                      sx={{
+                        height:"100px",
+                        overflowY:"scroll",
+                        justifyContent:"space-between"
+                      }}
+                      >
+            
+                      {item.comments.length !== 0 ? item.comments.map((record) => {
                         return (
                           <h6 key={record._id}>
                             <span
@@ -342,22 +384,33 @@ function Home() {
                             {record.text}{" "}
                             {record.postedBy._id === state._id && (
                               <i
-                                className="material-icons"
-                                style={{ fontSize: "12px", marginLeft: "5rem" }}
+                              className="material-icons"
+                                style={{ fontSize: "12px",display:"inline-flex",justifyContent:'end' }}
                                 onClick={() => {
-                                  if (
-                                    window.confirm(`Sure to Delete Comment?`)
-                                  ) {
-                                    deleteComment(item._id, record._id);
-                                  }
+                                  swal({
+                                    title: "Are you sure to delete comment?",
+                                    icon: "warning",
+                                    buttons: true,
+                                    dangerMode: true,
+                                  }).then((willDelete) => {
+                                    if (willDelete) {
+                                      deleteComment(item._id, record._id);
+                                      swal("Your comment has been deleted!", {
+                                        icon: "success",
+                                      });
+                                    }
+                                  });
                                 }}
-                              >
+                                >
                                 delete
                               </i>
                             )}
                           </h6>
                         );
-                      })}
+                      }) : <div style={{
+                        marginTop: '50px'
+                      }}>no comments</div>}
+                      </Box>
                     </>
                   ) : null}
 

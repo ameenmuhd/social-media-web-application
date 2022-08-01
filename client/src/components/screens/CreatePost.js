@@ -3,12 +3,14 @@ import M from "materialize-css";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../Navbar/Navbar";
 import BottomNavbar from "../BottomNavbar/BottomNavbar";
+import { LinearProgress } from "@mui/material";
 
 function CreatePost() {
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [image, setImage] = useState("");
   const [url, setUrl] = useState("");
+  const [loading,setLoading] = useState(false)
 
   useEffect(() => {
     if (!sessionStorage.getItem("user")) {
@@ -36,6 +38,7 @@ function CreatePost() {
           if (data.error) {
             M.toast({ html: data.error, classes: "#ef5350 red lighten-1" });
           } else {
+            setLoading(false)
             M.toast({
               html: "created successfully",
               classes: "#00e676 green accent-3",
@@ -56,6 +59,7 @@ function CreatePost() {
         classes: "#ef5350 red lighten-1",
       });
     }
+    setLoading(true)
     const data = new FormData();
     data.append("file", image);
     data.append("upload_preset", "project2");
@@ -76,6 +80,10 @@ function CreatePost() {
   return (
     <>
       <Navbar />
+      {loading ? 
+      <LinearProgress sx={{marginTop:"68px"}}/>
+      : ""
+      }
       <div
         className="card input-field"
         style={{

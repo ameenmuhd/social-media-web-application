@@ -24,6 +24,54 @@ router.get("/user/:id", requireLogin, (req, res) => {
     });
 });
 
+router.get('/allusers',(req,res)=>{
+  User.find({}).select('-password').then((users)=>{
+    res.json({users})
+  }).catch((err)=>{
+    console.log(err);
+  })
+})
+
+router.get('/blockuser/:userId',(req,res)=>{
+  try {
+    
+    User.findByIdAndUpdate({_id:req.params.userId},{
+        isBlocked:true
+    },{
+      new:true
+    }).then((result)=>{
+      User.find({}).select('-password').then((users)=>{
+        res.json({users})
+      }).catch((err)=>{
+        console.log(err);
+      })
+    })
+  } catch (error) {
+    console.log(error);
+  }
+})
+
+router.get('/unblockuser/:userId',(req,res)=>{
+  try {
+    
+    User.findByIdAndUpdate({_id:req.params.userId},{
+        isBlocked:false
+    },{
+      new:true
+    }).then((result)=>{
+      User.find({}).select('-password').then((users)=>{
+        res.json({users})
+      }).catch((err)=>{
+        console.log(err);
+      })
+    })
+  } catch (error) {
+    console.log(error);
+  }
+})
+
+
+
 router.put("/follow", requireLogin, (req, res) => {
   User.findByIdAndUpdate(
     req.body.followId,

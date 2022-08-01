@@ -45,7 +45,6 @@ router.post('/signup', (req, res) => {
 })
 
 router.post('/login', (req, res) => {
-    console.log(req.body);
     const { email, password } = req.body
     if (!email || !password) {
         return res.status(422).json({ err: "please add email or password" })
@@ -53,6 +52,9 @@ router.post('/login', (req, res) => {
     User.findOne({ email: email }).then((savedUser) => {
         if (!savedUser) {
             return res.status(422).json({ error: 'invalid email or password' })
+        }
+        if(savedUser.isBlocked){
+            return res.status(422).json({ error: "Cannot login your account has been blocked" })
         }
         bcrypt.compare(password, savedUser.password).then((doMatch) => {
             if (doMatch) {

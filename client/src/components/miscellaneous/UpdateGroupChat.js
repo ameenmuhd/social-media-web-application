@@ -3,7 +3,6 @@ import { ChatState } from "../../Context/ChatProvider";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 import IconButton from "@mui/joy/IconButton";
 import UserBadgeItem from "../UserListItem/UserBadgeItem";
 import { FormControl } from "@mui/material";
@@ -31,7 +30,10 @@ const UpdateGroupChat = ({ fetchAgain, setFetchAgain,fetchMessages }) => {
     ChatState();
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () =>{
+    setOpen(false);
+    setSearchResult([])
+  } 
   const [groupChatName, setGroupChatName] = useState();
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);

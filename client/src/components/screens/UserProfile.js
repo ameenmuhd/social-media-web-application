@@ -8,11 +8,13 @@ import Box from "@mui/material/Box";
 import { Audio } from "react-loader-spinner";
 import Navbar from "../Navbar/Navbar";
 import BottomNavbar from "../BottomNavbar/BottomNavbar";
+import ShowLoading from "../showLoadingComponents/ShowLoading";
 
 function UserProfile() {
   const [usersProfile, setProfile] = useState(null);
   const { state, dispatch } = useContext(UserContext);
   const { userId } = useParams();
+  const [loading, setLoading] = useState(false);
   const [showfollow, setShowfollow] = useState(
     state ? !state.following.includes(userId) : true
   );
@@ -25,6 +27,7 @@ function UserProfile() {
   }, []);
 
   useEffect(() => {
+    setLoading(true);
     fetch(`/user/${userId}`, {
       headers: {
         Authorization: "Bearer " + sessionStorage.getItem("jwt"),
@@ -32,7 +35,7 @@ function UserProfile() {
     })
       .then((res) => res.json())
       .then((result) => {
-        console.log(result);
+        setLoading(false);
         setProfile(result);
       });
   }, []);
@@ -122,8 +125,8 @@ function UserProfile() {
                 src={usersProfile.user.pic}
                 alt="no imag.."
                 style={{
-                  width: "160px",
-                  height: "160px",
+                  width: "150px",
+                  height: "150px",
                   borderRadius: "80px",
                 }}
               />
@@ -197,17 +200,7 @@ function UserProfile() {
           </div>
         </div>
       ) : (
-        <div
-          style={{
-            margin: "30px auto",
-            maxWidth: "150px",
-            padding: "20px",
-            textAlign: "center",
-            marginTop: "100px",
-          }}
-        >
-          <Audio height="100" width="100" color="red" ariaLabel="loading" />
-        </div>
+        <ShowLoading loading={loading} />
       )}
       <BottomNavbar />
     </>

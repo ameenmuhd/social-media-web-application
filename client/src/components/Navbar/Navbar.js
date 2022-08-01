@@ -13,14 +13,15 @@ import MapsUgcIcon from "@mui/icons-material/MapsUgc";
 import Avatar from "@mui/joy/Avatar";
 import M from "materialize-css";
 import { stringify } from "uuid";
+import UserListItem from "../UserListItem/UserListItem";
 
 function Navbar() {
   const searchModal = useRef(null);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [search, setSearch] = React.useState("");
-  const [userDetails,setUserDetails] = React.useState([])
+  const [userDetails, setUserDetails] = React.useState([]);
   const { state, dispatch } = useContext(UserContext);
-  
+
   useEffect(() => {
     M.Modal.init(searchModal.current);
   }, [state]);
@@ -34,23 +35,24 @@ function Navbar() {
   };
 
   const fetchUsers = (query) => {
-    console.log('query',query);
-    setSearch(query)
-    fetch('/search-users',{
-      method:"post",
+    console.log("query", query);
+    setSearch(query);
+    fetch("/search-users", {
+      method: "post",
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + sessionStorage.getItem("jwt"),
       },
-      body:JSON.stringify({
-        query
-      })
-    }).then(res=>res.json())
-    .then((results)=>{
-      console.log(results);
-      setUserDetails(results.user)
-    }) 
-  }
+      body: JSON.stringify({
+        query,
+      }),
+    })
+      .then((res) => res.json())
+      .then((results) => {
+        console.log(results);
+        setUserDetails(results.user);
+      });
+  };
 
   const navigate = useNavigate();
   return (
@@ -127,17 +129,34 @@ function Navbar() {
                       onChange={(e) => fetchUsers(e.target.value)}
                     />
                     <ul className="collection">
-                      {userDetails.map((item)=>{
-                        return   <Link to={item._id !== state._id ? '/profile/'+item._id : '/profile'} onClick={()=>{
-                          M.Modal.getInstance(searchModal.current).close()
-                          setSearch('')
-                        }}><li className="collection-item">{item.name}</li></Link>
-                        
+                      {userDetails.slice(0,4).map((item) => {
+                        return (
+                          <Link
+                            to={
+                              item._id !== state._id
+                                ? "/profile/" + item._id
+                                : "/profile"
+                            }
+                            onClick={() => {
+                              M.Modal.getInstance(searchModal.current).close();
+                              setSearch("");
+                            }}
+                          >
+                            <UserListItem
+                              key={item._id}
+                              user={item}
+                              handleFunction={() => accessChat(user)}
+                            />
+                          </Link>
+                        );
                       })}
                     </ul>
                   </div>
                   <div className="modal-footer">
-                    <button className="modal-close waves-effect waves-green btn-flat" onClick={()=>setSearch('')}>
+                    <button
+                      className="modal-close waves-effect waves-green btn-flat"
+                      onClick={() => setSearch("")}
+                    >
                       close
                     </button>
                   </div>

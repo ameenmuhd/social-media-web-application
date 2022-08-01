@@ -90,7 +90,7 @@ function MarketPlaceNav() {
       <AppBar position="fixed" sx={{ bgcolor: "white" }}>
         <Toolbar>
         <Typography variant="h4" component="div" sx={{ flexGrow: 1 }}>
-              <Link to={state ? "/" : "/login"} className="brand-logo">
+              <Link to={state ? "/marketplace" : "/login"} className="brand-logo">
                 MarketPlace
               </Link>
             </Typography>

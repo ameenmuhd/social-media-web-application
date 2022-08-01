@@ -23,6 +23,7 @@ require("./models/chat");
 require("./models/product");
 require("./models/chatModel");
 require("./models/messageModel");
+require("./models/category");
 
 app.use(express.json());
 app.use(cors());

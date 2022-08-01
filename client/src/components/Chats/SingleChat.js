@@ -13,8 +13,11 @@ import ScrollableChat from "./ScrollableChat";
 import io from 'socket.io-client'
 import Lottie, {} from 'react-lottie'
 import animationData from '../../animations/12966-typing-indicator.json'
-import Welcome from "../ChatComponents/Welcome";
+import Welcome from "./Welcome";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import TextField from '@mui/material/TextField';
+import './styles.css'
 
 const ENDPOINT = "http://localhost:5000";
 var socket, selectedChatCompare;
@@ -22,6 +25,8 @@ var socket, selectedChatCompare;
 function SingleChat({ fetchAgain, setFetchAgain }) {
   const { selectedChat, setSelectedChat, user, notification, setNotification } =
     ChatState();
+    const userData = useSelector((state1)=> state1.user.value)
+
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState("");
@@ -54,7 +59,6 @@ function SingleChat({ fetchAgain, setFetchAgain }) {
         `/getmessages/${selectedChat._id}`,
         config
       );
-      console.log(data);
       setMessages(data);
       setLoading(false);
 
@@ -66,7 +70,7 @@ function SingleChat({ fetchAgain, setFetchAgain }) {
   
   useEffect(() => {
     socket = io(ENDPOINT);
-    socket.emit("setup", user);
+    socket.emit("setup", userData);
     socket.on("connected", () => setSocketConnected(true));
     socket.on("typing", () => setIsTyping(true));
     socket.on("stop typing", () => setIsTyping(false));
@@ -175,7 +179,7 @@ function SingleChat({ fetchAgain, setFetchAgain }) {
                        "/profile/" + selectedChat.users[1]._id
                       }
                     >
-                {getSender(user, selectedChat.users)}
+                {getSender(userData, selectedChat.users)}
                     </Link>
                 </div>
             ) : (
@@ -226,7 +230,8 @@ function SingleChat({ fetchAgain, setFetchAgain }) {
                   />
                 </div> : ""}
 
-                <input id="my-input" placeholder="Enter your text" onChange={typingHandler} value={newMessage}/>
+                {/* <input id="my-input" placeholder="Enter your text" onChange={typingHandler} value={newMessage}/> */}
+                <TextField className="input-f"  id="outlined-basic" label="Message..." type="text" variant="outlined" onChange={typingHandler} value={newMessage} />
               </FormControl>
             </Box>
      
@@ -240,7 +245,7 @@ function SingleChat({ fetchAgain, setFetchAgain }) {
             height: "100%",
           }}
         >
-          <Welcome currentUser={user.name}/>
+          <Welcome currentUser={userData.name}/>
         </Box>
       )}
     </>

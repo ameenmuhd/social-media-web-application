@@ -16,6 +16,7 @@ import axios from "axios";
 import UserListItem from "../UserListItem/UserListItem";
 import { ChatState } from "../../Context/ChatProvider";
 import { Link } from "react-router-dom";
+import Skeleton from "@mui/material/Skeleton";
 
 export default function MenuAppBar() {
   const [auth, setAuth] = React.useState(true);
@@ -64,19 +65,23 @@ export default function MenuAppBar() {
 
   const accessChat = async (userId) => {
     try {
-        setLoadingChat(true)
-        const { data } = await axios.post('/personalchat',{
-          userId
-        }, {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: "Bearer " + sessionStorage.getItem("jwt"),
-            },
-          });
-          if (!chats.find((c) => c._id === data._id)) setChats([data, ...chats]);
-          setSelectedChat(data);
-          setLoadingChat(false);
-          setIsDrawerOpen(false);
+      setLoadingChat(true);
+      const { data } = await axios.post(
+        "/personalchat",
+        {
+          userId,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + sessionStorage.getItem("jwt"),
+          },
+        }
+      );
+      if (!chats.find((c) => c._id === data._id)) setChats([data, ...chats]);
+      setSelectedChat(data);
+      setLoadingChat(false);
+      setIsDrawerOpen(false);
     } catch (error) {
       console.log(error);
       M.toast({
@@ -84,7 +89,7 @@ export default function MenuAppBar() {
         classes: "#ef5350 red lighten-1",
       });
     }
-  }
+  };
 
   return (
     <>
@@ -95,59 +100,20 @@ export default function MenuAppBar() {
               size="large"
               edge="start"
               aria-label="menu"
-              sx={{ mr: 2 ,color:"black"}}
+              sx={{ mr: 2, color: "black" }}
               onClick={() => setIsDrawerOpen(true)}
             >
               <SearchIcon />
             </IconButton>
-            <Typography variant="h4" component="div" sx={{ flexGrow: 1,color:"black" }}>
-            <Link to={user ? "/" : "/login"} className="brand-logo" >
-              Messages
-            </Link>
+            <Typography
+              variant="h4"
+              component="div"
+              sx={{ flexGrow: 1, color: "black" }}
+            >
+              <Link to={user ? "/" : "/login"} className="brand-logo">
+                Messages
+              </Link>
             </Typography>
-
-            {/* {auth && (
-              <div>
-                <IconButton
-                  size="large"
-                  edge="start"
-                  color="inherit"
-                  aria-label="menu"
-                  sx={{ mr: 2,color:"black" }}
-                >
-                  <NotificationsIcon />
-                </IconButton>
-
-                <IconButton
-                  size="large"
-                  aria-label="account of current user"
-                  aria-controls="menu-appbar"
-                  aria-haspopup="true"
-                  onClick={handleMenu}
-                  sx={{color:"black"}}
-                >
-                  <AccountCircle />
-                </IconButton>
-                <Menu
-                  id="menu-appbar"
-                  anchorEl={anchorEl}
-                  anchorOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                  }}
-                  keepMounted
-                  transformOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                  }}
-                  open={Boolean(anchorEl)}
-                  onClose={handleClose}
-                >
-                  <MenuItem onClick={handleClose}>Profile</MenuItem>
-                  <MenuItem onClick={handleClose}>My account</MenuItem>
-                </Menu>
-              </div>
-            )} */}
           </Toolbar>
         </AppBar>
       </Box>
@@ -176,15 +142,29 @@ export default function MenuAppBar() {
               </Button>
             </Box>
             {loading ? (
-                <div>loading</div>
+              <Box sx={{ width: "100%" }}>
+                <Skeleton />
+                <Skeleton animation="wave" />
+                <Skeleton animation={false} />
+              </Box>
             ) : (
-                searchResult?.slice(0,4).map((user)=>{
-                    return(
-                        <UserListItem key={user._id} user={user} handleFunction={()=>accessChat(user)}/>
-                    )
-                })
+              searchResult?.slice(0, 4).map((user) => {
+                return (
+                  <UserListItem
+                    key={user._id}
+                    user={user}
+                    handleFunction={() => accessChat(user)}
+                  />
+                );
+              })
             )}
-            {loadingChat && <h3>Loading....</h3>}
+            {loadingChat && (
+              <Box sx={{ width: "100%" }}>
+                <Skeleton />
+                <Skeleton animation="wave" />
+                <Skeleton animation={false} />
+              </Box>
+            )}
           </Box>
         </Drawer>
       </div>

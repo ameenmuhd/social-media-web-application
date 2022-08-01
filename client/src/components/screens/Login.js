@@ -3,12 +3,16 @@ import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../../App";
 import M from "materialize-css";
 import Navbar from "../Navbar/Navbar";
+import {useDispatch} from 'react-redux';
+import {signIn} from '../../Redux/Slices/User';
 
 function Login() {
   const { state, dispatch } = useContext(UserContext);
   const navigate = useNavigate();
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
+
+  const dispatch1 = useDispatch()
 
   useEffect(() => {
     if (sessionStorage.getItem("user")) {
@@ -57,6 +61,7 @@ function Login() {
           sessionStorage.setItem("jwt", data.token);
           sessionStorage.setItem("user", JSON.stringify(data.user));
           dispatch({ type: "USER", payload: data.user });
+          dispatch1(signIn(data.user))
           M.toast({
             html: "signedin successfully",
             classes: "#00e676 green accent-3",

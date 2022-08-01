@@ -1,0 +1,11 @@
+.bottomnav{
+    overflow-x: auto;
+}
+
+.darkNav{
+    background-color: black;
+}
+
+.whiteNav{
+    color: #fff;
+}

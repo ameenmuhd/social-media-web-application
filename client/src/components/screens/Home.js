@@ -20,6 +20,7 @@ import Navbar from "../Navbar/Navbar";
 import BottomNavbar from "../BottomNavbar/BottomNavbar";
 import swal from "sweetalert";
 import { display } from "@mui/system";
+import { useSelector } from "react-redux";
 // import CommentModal from "../commentModal/CommentModal";
 
 function Home() {
@@ -28,6 +29,7 @@ function Home() {
   const [data, setData] = useState([]);
   const { state, dispatch } = useContext(UserContext);
   const navigate = useNavigate();
+  const userData = useSelector((state1)=> state1.user.value)
 
   useEffect(() => {
     if (!sessionStorage.getItem("user")) {
@@ -450,7 +452,7 @@ function Home() {
                       }}
                       >
             
-                      {item.comments.map((record) => {
+                      {item.comments.length !== 0 ? item.comments.map((record) => {
                         return (
                           <h6 key={record._id}>
                             <span
@@ -484,7 +486,9 @@ function Home() {
                             )}
                           </h6>
                         );
-                      })}
+                      }) : <div style={{
+                        marginTop: '50px'
+                      }}>no comments</div>}
                       </Box>
                     </>
                   ) : null}

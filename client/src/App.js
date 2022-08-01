@@ -14,15 +14,16 @@ import UserEdit from './components/screens/UserEdit/UserEdit';
 import Chat from './components/screens/Chat';
 import MarketPlace from './components/MarketPlace/MarketPlace';
 import SellProduct from './components/MarketPlace/SellProduct';
-import ChatProvider from './Context/ChatProvider';
+import ChatProvider, { ChatState } from './Context/ChatProvider';
 import AdminLogin from './components/screens/AdminLogin';
 import AdminHome from './components/AdminComponents/AdminHome';
 import ProductDetails from './components/MarketPlace/ProductDetails';
+import MyAds from './components/MarketPlace/MyAds';
+import EditMyAds from './components/MarketPlace/EditMyAds';
 
 export const UserContext = createContext()
 
 const Routing = ()=>{
-  const navigate = useNavigate()
   const {state,dispatch} = useContext(UserContext)
   useEffect(()=>{
     const user = JSON.parse(sessionStorage.getItem("user"))
@@ -47,6 +48,8 @@ const Routing = ()=>{
     <Route path='/marketplace' element={<MarketPlace />}></Route>
     <Route path='/sell' element={<SellProduct />}></Route>
     <Route path='/product-details/:productId' element={<ProductDetails />}></Route>
+    <Route path='/myads/:userId' element={<MyAds />}></Route>
+    <Route path='/editmyads/:productId' element={<EditMyAds />}></Route>
     <Route path='/adminlogin' element={<AdminLogin />}></Route>
     <Route path='/admin' element={<AdminHome />}></Route>
     </Routes>

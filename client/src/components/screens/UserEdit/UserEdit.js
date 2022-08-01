@@ -7,9 +7,9 @@ import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import M from "materialize-css";
-import { Audio } from "react-loader-spinner";
 import BottomNavbar from "../../BottomNavbar/BottomNavbar";
 import Navbar from "../../Navbar/Navbar";
+import ShowLoading from "../../showLoadingComponents/ShowLoading";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -54,9 +54,11 @@ function UserEdit() {
   const [newPassword, setNewPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
   const { state, dispatch } = useContext(UserContext);
+  const [loading,setLoading] = useState(false)
   const [img,setImg] = useState("")
 
   useEffect(() => {
+    setLoading(true)
     fetch(`/edituser/${userId}`, {
       headers: {
         Authorization: "Bearer " + sessionStorage.getItem("jwt"),
@@ -64,6 +66,7 @@ function UserEdit() {
     })
       .then((res) => res.json())
       .then((result) => {
+        setLoading(false)
         setUser(result);
         setName(result.user.name);
         setImage(result.user.pic);
@@ -291,7 +294,7 @@ function UserEdit() {
                 marginTop: "100px",
               }}
             >
-              <Audio height="100" width="100" color="red" ariaLabel="loading" />
+              <ShowLoading loading={loading}/>
             </div>
           )}
         </TabPanel>
