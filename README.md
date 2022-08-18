@@ -6,6 +6,12 @@ Hey, check out the Live-App, just visit https://myproject002.herokuapp.com.
 ###### Social Media Web Application
 NOTE ENV KEYS HAVE BEEN STRIPPED, MUST USE OWN KEYS IN ENV AND PROXY INSIDE PACKAGE.JSON
 
+## Sample images
+![Screenshot from 2021-10-29 10-01-58](https://res.cloudinary.com/ameen123/image/upload/v1660822510/Screenshot_2022-08-18_170120_una92i.png)
+![Screenshot from 2021-10-29 10-01-58](https://res.cloudinary.com/ameen123/image/upload/v1660822510/Screenshot_2022-08-18_170327_k4nckz.png)
+![Screenshot from 2021-10-29 10-01-58](https://res.cloudinary.com/ameen123/image/upload/v1660822510/Screenshot_2022-08-18_170435_osxxvv.png)
+![Screenshot from 2021-10-29 10-01-58](https://res.cloudinary.com/ameen123/image/upload/v1660822510/Screenshot_2022-08-18_170403_jmvsvy.png)
+
 Social media web application clone along the lines of Signal, Facebook, and Twitter. This will include functionality of posting, commenting, user authentication, private messaging and group chat.
 
 ## Technical Goals
